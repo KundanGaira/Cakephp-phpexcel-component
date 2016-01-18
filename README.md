@@ -9,6 +9,12 @@
 ### How to use
  * Download, and place https://github.com/PHPOffice/PHPExcel inside you vendor **(app/Vendor)**.
  * Place our Component inside Component folder **(app/Controller/Component)**.
- * Load the component in any Controller in order to use it. 
+ * Load the component in any Controller in order to use it.
+   *public $components = array('PhpExcel');* 
  
 ### Example usage
+
+    $PhpExcel=$this->PhpExcel;
+    $PhpExcel->createExcel();
+    $PhpExcel->downloadFile();
+   
