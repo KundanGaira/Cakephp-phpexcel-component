@@ -18,9 +18,31 @@ class PhpExcelComponent extends Component {
             $msg = 'Unable to load ' . $this->phpExcelName . '.';
             $this->_requestError($msg);
         }
-        $this->objPHPExcel = new PHPExcel(); // Make object accessable globally
-        $this->objPHPExcel->getActiveSheet()->setTitle($this->defaults['sheet1Name']);
+        $this->objPHPExcel = new PHPExcel(); // Make excel object, globally accessable
+        
+        $this->objWorksheet = $this->objPHPExcel->getActiveSheet(); // Make current sheet object, globally accessable
+        $this->objWorksheet->setTitle($this->defaults['sheet1Name']);
         return $this->objPHPExcel;
+    }
+    
+    public function openExcel($excelFileName) {
+        $loadStatus = App::import('Vendor', 'PHPExcel'); // Load PHPExcel from vender location
+        if (!$loadStatus) {
+            $msg = 'Unable to load ' . $this->phpExcelName . '.';
+            $this->_requestError($msg);
+        }
+        $objReader = PHPExcel_IOFactory::createReader($this->inputFileType); // Create reader
+        $objReader->setIncludeCharts(TRUE);  // If charts are avilable use them
+        
+        $this->objPHPExcel =$objReader->load($excelFileName);// Make excel object, globally accessable
+        $this->objWorksheet = $this->objPHPExcel->getActiveSheet(); // Make current sheet object, globally accessable
+        
+        return $this->objPHPExcel;
+    }
+    
+    public function selectSheetByName($sheetName) {
+        $this->objWorksheet=$this->objPHPExcel->getSheetByName($sheetName);
+        return $this->objWorksheet;
     }
 
     /*
@@ -64,7 +86,81 @@ class PhpExcelComponent extends Component {
         $objWriter->save('php://output');
         die;
     }
+    public function _makeChartFromSheetData($dataStartCol, $dataStartRow,$dataEndCol, $dataEndRow,$chartHeight,$chartWidth) {
+        $worksheetName = $this->objWorksheet->getTitle();
+        
+        $seriesStartRow = $dataStartRow + 1;
+        $seriesTotalCols = $dataStartCol + ($dataEndCol - 1);
+        $dataSeriesLabels = $dataSeriesValues = array();
+        
+        // Basic structure  of sheet data
+        /* $objWorksheet->fromArray(
+          array(
+          array('', 2010, 2011, 2012),
+          array('Q1', 12, 15, 21),
+          array('Q2', 56, 73, 86),
+          array('Q3', 52, 61, 69),
+          array('Q4', 30, 32, 0),
+          )
+          ); */
+        
+        // Labels for dataseries.  Direction ===>
+        for ($i = $dataStartCol; $i <= $seriesTotalCols; $i++) {
+            array_push($dataSeriesLabels, new PHPExcel_Chart_DataSeriesValues('String', $worksheetName . '!$' . $this->alphabets[$dataStartCol] . '$' . $i, NULL, 1));
+        }
+        echo'<pre>';
+        print_r($dataSeriesLabels);
+        die;
+        
+        $xAxisTickValues = array(
+            new PHPExcel_Chart_DataSeriesValues('String', $worksheetName . '!$' . $this->alphabets[$col + 1] . '$' . $row . ':$' . $this->alphabets[$col + 3] . '$' . $row, NULL, 3), //	e.g. Epicauses
+        );
 
+        for ($i = $dataStart; $i <= $dataEnd; $i++) {
+            array_push($dataSeriesValues, new PHPExcel_Chart_DataSeriesValues('Number', $worksheetName . '!$' . $this->alphabets[$col + 1] . '$' . $i . ':$' . $this->alphabets[$col + 3] . '$' . $i, NULL, 3));
+        }
+
+        $series = new PHPExcel_Chart_DataSeries(
+                PHPExcel_Chart_DataSeries::TYPE_BARCHART, // plotType
+                PHPExcel_Chart_DataSeries::GROUPING_STACKED, // plotGrouping
+                range(0, count($dataSeriesValues) - 1), // plotOrder
+                $dataSeriesLabels, // plotLabel
+                $xAxisTickValues, // plotCategory
+                $dataSeriesValues        // plotValues
+        );
+        // new PHPExcel_Chart_DataSeries($plotType, $plotGrouping, $plotOrder, $plotLabel, $plotCategory, $plotValues, $smoothLine, $plotStyle);
+        $series->setPlotDirection(PHPExcel_Chart_DataSeries::DIRECTION_COL);
+        //	Set the series in the plot area
+        $plotArea = new PHPExcel_Chart_PlotArea(NULL, array($series));
+        //	Set the chart legend
+        if ($type == 3) {
+            $legend = null;
+        } else {
+            $legend = new PHPExcel_Chart_Legend(PHPExcel_Chart_Legend::POSITION_RIGHT, NULL, false);
+        }
+        //$legend->
+        //$legend->setOverlay(true);
+        $chrtTitle = ' ';
+        $title = new PHPExcel_Chart_Title($chrtTitle);
+        $yAxisLabel = new PHPExcel_Chart_Title('');
+        $chart = new PHPExcel_Chart(
+                null, // name
+                $title, // title
+                $legend, // legend
+                $plotArea, // plotArea
+                true, // plotVisibleOnly
+                0, // displayBlanksAs
+                NULL, // xAxisLabel
+                $yAxisLabel  // yAxisLabel
+        );
+        //	Set the position where the chart should appear in the worksheet
+        $chart->setTopLeftPosition($this->alphabets[$col] . $row);
+        $chart->setBottomRightPosition($this->alphabets[$col + $width] . ($row + $chartHeight));
+        //
+        //	Add the chart to the worksheet
+
+        $this->objWorksheet->addChart($chart);
+    }
     /*
      * ************** Style related functions*****************************
      */
@@ -95,11 +191,15 @@ class PhpExcelComponent extends Component {
         $this->objWorksheet->getComment($cellDim)->getText()->createTextRun($comment); // Add comment
     }
 
-    function _writeCellValue($cell, $value) {
+    function writeCellValue($cell, $value) {
         $this->objWorksheet->getCell($cell)->setValue($value);
     }
+    function getCellValue($cell) {
+        return $this->objWorksheet->getCell($cell)->getCalculatedValue();
+    }
+    
 
-    public function _alphabets($level) {
+    public function alphabets($level) {
         //  Alphabets Array
         $this->alphabets = $alphabets = range('A', 'Z'); // Array containing latters from A to Z
         for ($i = 0; $i < $level; $i++) {
