@@ -12,7 +12,11 @@
  * Load the component in any Controller in order to use it.
     
   ```public $components = array('PhpExcel');``` 
- 
+
+### Conventions
+    *Cell References should be alphanumeric value. e.g. "A23", "B23".
+    *Color code names should be in hex (without hash symbol)or a text like "red"
+  
 ### Example usage
 
     $PhpExcel=$this->PhpExcel;
