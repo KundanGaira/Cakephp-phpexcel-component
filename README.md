@@ -15,7 +15,7 @@
 
 ### Conventions
     *Cell References should be alphanumeric value. e.g. "A23", "B23".
-    *Color code names should be in hex (without hash symbol)or a text like "red"
+    *Colors  should be in hex code (without hash symbol) or a text like "red"
   
 ### Example usage
 
