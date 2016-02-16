@@ -19,12 +19,12 @@ class PhpExcelComponent extends Component {
             $this->_requestError($msg);
         }
         $this->objPHPExcel = new PHPExcel(); // Make excel object, globally accessable
-        
+
         $this->objWorksheet = $this->objPHPExcel->getActiveSheet(); // Make current sheet object, globally accessable
         $this->objWorksheet->setTitle($this->defaults['sheet1Name']);
         return $this->objPHPExcel;
     }
-    
+
     public function openExcel($excelFileName) {
         $loadStatus = App::import('Vendor', 'PHPExcel'); // Load PHPExcel from vender location
         if (!$loadStatus) {
@@ -34,14 +34,17 @@ class PhpExcelComponent extends Component {
         $objReader = PHPExcel_IOFactory::createReader($this->inputFileType); // Create reader
         $objReader->setIncludeCharts(TRUE);  // If charts are avilable use them
         
-        $this->objPHPExcel =$objReader->load($excelFileName);// Make excel object, globally accessable
+        if(!file_exists($excelFileName)){
+            $this->_requestError('Unable to locate '.$excelFileName.' !');
+        }
+        $this->objPHPExcel = $objReader->load($excelFileName); // Make excel object, globally accessable
         $this->objWorksheet = $this->objPHPExcel->getActiveSheet(); // Make current sheet object, globally accessable
-        
+
         return $this->objPHPExcel;
     }
-    
+
     public function selectSheetByName($sheetName) {
-        $this->objWorksheet=$this->objPHPExcel->getSheetByName($sheetName);
+        $this->objWorksheet = $this->objPHPExcel->getSheetByName($sheetName);
         return $this->objWorksheet;
     }
 
@@ -86,13 +89,15 @@ class PhpExcelComponent extends Component {
         $objWriter->save('php://output');
         die;
     }
-    public function _makeChartFromSheetData($dataStartCol, $dataStartRow,$dataEndCol, $dataEndRow,$chartHeight,$chartWidth) {
+
+    public function _makeChartFromSheetData($dataStartCol, $dataStartRow, $dataEndCol, $dataEndRow, $chartHeight, $chartWidth) {
         $worksheetName = $this->objWorksheet->getTitle();
-        
+
         $seriesStartRow = $dataStartRow + 1;
         $seriesTotalCols = $dataStartCol + ($dataEndCol - 1);
-        $dataSeriesLabels = $dataSeriesValues = array();
-        
+        $dataSeriesLabels = $xAxisTickValues = $dataSeriesValues = array();
+        $totalRows = $dataEndRow - 1;
+
         // Basic structure  of sheet data
         /* $objWorksheet->fromArray(
           array(
@@ -103,18 +108,15 @@ class PhpExcelComponent extends Component {
           array('Q4', 30, 32, 0),
           )
           ); */
-        
+
         // Labels for dataseries.  Direction ===>
         for ($i = $dataStartCol; $i <= $seriesTotalCols; $i++) {
             array_push($dataSeriesLabels, new PHPExcel_Chart_DataSeriesValues('String', $worksheetName . '!$' . $this->alphabets[$dataStartCol] . '$' . $i, NULL, 1));
         }
-        echo'<pre>';
-        print_r($dataSeriesLabels);
-        die;
-        
-        $xAxisTickValues = array(
-            new PHPExcel_Chart_DataSeriesValues('String', $worksheetName . '!$' . $this->alphabets[$col + 1] . '$' . $row . ':$' . $this->alphabets[$col + 3] . '$' . $row, NULL, 3), //	e.g. Epicauses
-        );
+
+        for ($j = $dataStartRow; $j <= $totalRows; $j++) {
+            array_push($xAxisTickValues, new PHPExcel_Chart_DataSeriesValues('String', $worksheetName . '!$' . $this->alphabets[$j] . '$' . $dataStartCol, NULL, 1));
+        }
 
         for ($i = $dataStart; $i <= $dataEnd; $i++) {
             array_push($dataSeriesValues, new PHPExcel_Chart_DataSeriesValues('Number', $worksheetName . '!$' . $this->alphabets[$col + 1] . '$' . $i . ':$' . $this->alphabets[$col + 3] . '$' . $i, NULL, 3));
@@ -161,6 +163,7 @@ class PhpExcelComponent extends Component {
 
         $this->objWorksheet->addChart($chart);
     }
+
     /*
      * ************** Style related functions*****************************
      */
@@ -194,10 +197,29 @@ class PhpExcelComponent extends Component {
     function writeCellValue($cell, $value) {
         $this->objWorksheet->getCell($cell)->setValue($value);
     }
+
     function getCellValue($cell) {
         return $this->objWorksheet->getCell($cell)->getCalculatedValue();
     }
-    
+
+    function mapAlphabets($colIndex) {
+        if (empty($this->alphabets)) {
+            $this->alphabets(1);
+        }
+        if (!empty($this->alphabets[$colIndex])) {
+            return $this->alphabets[$colIndex];
+        } else {
+            $this->_requestError('Invalid column Index passed !');
+        }
+    }
+
+    function getTotalRows($column = 0) {
+        $returnVal = 1;
+        if (!empty($this->objWorksheet->getHighestRow($column))) {
+            $returnVal = $this->objWorksheet->getHighestRow($column);
+        }
+        return $returnVal;
+    }
 
     public function alphabets($level) {
         //  Alphabets Array
@@ -217,7 +239,7 @@ class PhpExcelComponent extends Component {
         return $this->objWorksheet;
     }
 
-    private function _requestError($msg) {
+    public function _requestError($msg) {
         echo json_encode(array('status' => 'error', 'msg' => $msg));
         die;
     }
