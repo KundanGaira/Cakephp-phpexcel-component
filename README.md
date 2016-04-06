@@ -1,5 +1,5 @@
-# Cakephp Component for Phpexcel
-  Cakephp component for using **Phpexcel** with cakephp application. Commonly used features of Phpexcel are  simplified in simple   methods.
+# Cakephp "Phpexcel" Component 
+  Cakephp component for using **Phpexcel** with cakephp application. Commonly used features of Phpexcel are  simplified in a form of simple methods.You can enhance your cakephp application with features like excel export, excel chart etc.
   
 ### Dependencies
  * https://github.com/PHPOffice/PHPExcel
