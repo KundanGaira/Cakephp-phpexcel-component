@@ -6,7 +6,7 @@
  * Your Patience :-)
 
 ### How to use
- For "Cakephp 3.*"
+ **For "Cakephp 3.*"**
  
  * Put PhpExcel folder inside your vendor folder (/vendor).
  * Put PhpExcelComponent.php file (from cakephp3 folder) inside /src/Controller/Component.
@@ -14,7 +14,7 @@
 
      ```$this->loadComponent('PhpExcel');``` 
  
-For "Cakephp 2.*"
+**For "Cakephp 2.*"**
 
   *Put PhpExcel folder inside your vendor folder (/app/Vendor).
   *Put PhpExcelComponent.php file (from cakephp2 folder) inside /app/Controller/Component.  
@@ -23,7 +23,7 @@ For "Cakephp 2.*"
     ```public $components = array('PhpExcel');``` 
 
 ### Conventions
-    *Cell References should be alphanumeric value. e.g. "A2", "B2". For first cell of excel ,It is "A1".
+    *Cell References should be alphanumeric value. e.g. "A2", "B2".Like for first cell of excel sheet,It is "A1".
     *Colors  should be in hex code (without hash symbol) or a text like "red"
   
 ### Example usage
