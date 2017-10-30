@@ -1,20 +1,25 @@
 # Cakephp "Phpexcel" Component 
-  Cakephp component for using **Phpexcel** with cakephp application. Commonly used features of Phpexcel are  simplified in a form of simple methods.You can enhance your cakephp application with features like excel export, excel chart etc.
+  This component is for ,to be used with popular PHP based MVC framework "Cakephp",for using features of **Phpexcel**. Some common features of Phpexcel are  simplified in a form of simple methods.You can enhance your cakephp application with features like excel export, excel chart etc.
   
 ### Dependencies
- * Core Phpexcel Class., Which can be downloaded from https://github.com/PHPOffice/PHPExcel
- * Cakephp versions 2.*
+ * Core Phpexcel Class. Already added with this repository (PhpExcel folder). But you can also download from https://github.com/PHPOffice/PHPExcel . 
  * Your Patience :-)
 
 ### How to use
- * Download, and place All files from https://github.com/PHPOffice/PHPExcel to  your vendor **(app/Vendor)**.
- * Place our Component inside Component folder **(app/Controller/Component)**.
+ "Cakephp 3.*" 
+  Put PhpExcel folder inside your vendor folder (/vendor).
+  Put PhpExcelComponent.php file (from cakephp3 folder) inside /src/Controller/Component.
  * Load the component in any Controller in order to use it.
-    
-  ```public $components = array('PhpExcel');``` 
+     ```$this->loadComponent('PhpExcel');``` 
+ 
+"Cakephp 2.*"
+  Put PhpExcel folder inside your vendor folder (/app/Vendor).
+  Put PhpExcelComponent.php file (from cakephp2 folder) inside /app/Controller/Component.  
+  * Load the component in any Controller in order to use it.
+    ```public $components = array('PhpExcel');``` 
 
 ### Conventions
-    *Cell References should be alphanumeric value. e.g. "A23", "B23".
+    *Cell References should be alphanumeric value. e.g. "A2", "B2". For first cell of excel ,It is "A1".
     *Colors  should be in hex code (without hash symbol) or a text like "red"
   
 ### Example usage
