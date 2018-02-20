@@ -1,5 +1,7 @@
 <?php
-
+/*
+For cakephp version 2.*
+*/
 class PhpExcelComponent extends Component {
 
     private $phpExcelName = 'PHPExcel';
