@@ -14,6 +14,7 @@
     1.Put "phpoffice" folder directly inside your vendor folder (/vendor). OR
     2.Using composer
         Add these lines in your composer.json
+
         ```"repositories": [
             {
                 "type": "vcs",
@@ -26,7 +27,9 @@
                 "phpoffice/phpexcel": "1.8.0"
             },
         ```
+
         Then update composer using command
+
         ``` composer update ```
 
  * Now in order to use it, load the component in any Controller using following code.
