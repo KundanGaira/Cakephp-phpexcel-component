@@ -12,23 +12,25 @@
  * Now second step is to, include directory containing Phpexcel classes.This can be done in two ways.
    
     1.Put "phpoffice" folder directly inside your vendor folder (/vendor). OR
+
     2.Using composer
+
         Add these lines in your composer.json
 
-        ```"repositories": [
+            "repositories": [
             {
                 "type": "vcs",
                 "url": "https://github.com/PHPOffice/PHPExcel.git"
             }
-        ],
-        ```
+            ],
         
-        ``` "require": {
+        
+            "require": {
                 "phpoffice/phpexcel": "1.8.0"
             },
-        ```
+            
 
-        Then update composer using command
+    Then update composer using command
 
         ``` composer update ```
 
