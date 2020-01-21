@@ -14,7 +14,7 @@ class PhpExcelComponent extends Component {
     public function initialize(array $config) {
         parent::initialize($config);
         // Load PHPExcel from vender location
-        require_once ROOT . DS . 'vendor' . DS . 'PhpExcel' . DS . 'PHPExcel.php';
+        require_once ROOT . DS . 'vendor' .DS.'phpoffice'.DS.'phpexcel'.DS.'Classes' .DS . 'PHPExcel.php';
     }
 
     /*
