@@ -15,7 +15,7 @@
 
     2.Using composer
 
-        Add these lines in your composer.json
+       Add these lines in your composer.json
 
             "repositories": [
             {
@@ -32,7 +32,7 @@
 
     Then update composer using command
 
-        ``` composer update ```
+        ```composer update``` 
 
  * Now in order to use it, load the component in any Controller using following code.
 
