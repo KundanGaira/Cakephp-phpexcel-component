@@ -183,7 +183,7 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
 			if (isset($worksheet_ss['Name'])) {
 				$tmpInfo['worksheetName'] = (string) $worksheet_ss['Name'];
 			} else {
-				$tmpInfo['worksheetName'] = "Worksheet_{$worksheetID}";
+				$tmpInfo['worksheetName'] = "Worksheet_[$worksheetID]";
 			}
 
 			if (isset($worksheet->Table->Row)) {
@@ -378,7 +378,7 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
 		if (isset($xml->CustomDocumentProperties)) {
 			foreach($xml->CustomDocumentProperties[0] as $propertyName => $propertyValue) {
 				$propertyAttributes = $propertyValue->attributes($namespaces['dt']);
-				$propertyName = preg_replace_callback('/_x([0-9a-z]{4})_/','PHPExcel_Reader_Excel2003XML::_hex2str',$propertyName);
+				$propertyName = preg_replace_callback('/_x([0-9a-z][4])_/','PHPExcel_Reader_Excel2003XML::_hex2str',$propertyName);
 				$propertyType = PHPExcel_DocumentProperties::PROPERTY_TYPE_UNKNOWN;
 				switch((string) $propertyAttributes) {
 					case 'string' :
@@ -699,12 +699,12 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
 												//	Empty R reference is the current row
 												if ($rowReference == '') $rowReference = $rowID;
 												//	Bracketed R references are relative to the current row
-												if ($rowReference{0} == '[') $rowReference = $rowID + trim($rowReference,'[]');
+												if ($rowReference[0] == '[') $rowReference = $rowID + trim($rowReference,'[]');
 												$columnReference = $cellReference[4][0];
 												//	Empty C reference is the current column
 												if ($columnReference == '') $columnReference = $columnNumber;
 												//	Bracketed C references are relative to the current column
-												if ($columnReference{0} == '[') $columnReference = $columnNumber + trim($columnReference,'[]');
+												if ($columnReference[0] == '[') $columnReference = $columnNumber + trim($columnReference,'[]');
 												$A1CellReference = PHPExcel_Cell::stringFromColumnIndex($columnReference-1).$rowReference;
 													$value = substr_replace($value,$A1CellReference,$cellReference[0][1],strlen($cellReference[0][0]));
 											}

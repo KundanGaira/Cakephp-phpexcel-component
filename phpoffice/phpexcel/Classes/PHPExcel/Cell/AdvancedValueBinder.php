@@ -115,7 +115,7 @@ class PHPExcel_Cell_AdvancedValueBinder extends PHPExcel_Cell_DefaultValueBinder
             $currencyCode = PHPExcel_Shared_String::getCurrencyCode();
             $decimalSeparator = PHPExcel_Shared_String::getDecimalSeparator();
             $thousandsSeparator = PHPExcel_Shared_String::getThousandsSeparator();
-            if (preg_match('/^'.preg_quote($currencyCode).' *(\d{1,3}('.preg_quote($thousandsSeparator).'\d{3})*|(\d+))('.preg_quote($decimalSeparator).'\d{2})?$/', $value)) {
+            if (preg_match('/^'.preg_quote($currencyCode).' *(\d{1,3}('.preg_quote($thousandsSeparator).'\d[3])*|(\d+))('.preg_quote($decimalSeparator).'\d[2])?$/', $value)) {
                 // Convert value to number
                 $value = (float) trim(str_replace(array($currencyCode, $thousandsSeparator, $decimalSeparator), array('', '', '.'), $value));
                 $cell->setValueExplicit( $value, PHPExcel_Cell_DataType::TYPE_NUMERIC);
@@ -125,7 +125,7 @@ class PHPExcel_Cell_AdvancedValueBinder extends PHPExcel_Cell_DefaultValueBinder
                         str_replace('$', $currencyCode, PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE )
                     );
                 return true;
-            } elseif (preg_match('/^\$ *(\d{1,3}(\,\d{3})*|(\d+))(\.\d{2})?$/', $value)) {
+            } elseif (preg_match('/^\$ *(\d{1,3}(\,\d[3])*|(\d+))(\.\d[2])?$/', $value)) {
                 // Convert value to number
                 $value = (float) trim(str_replace(array('$',','), '', $value));
                 $cell->setValueExplicit( $value, PHPExcel_Cell_DataType::TYPE_NUMERIC);

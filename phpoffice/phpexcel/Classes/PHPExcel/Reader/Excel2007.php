@@ -271,7 +271,7 @@ class PHPExcel_Reader_Excel2007 extends PHPExcel_Reader_Abstract implements PHPE
 //		echo 'Formula', PHP_EOL;
 //		echo '$c->f is ', $c->f, PHP_EOL;
 		$cellDataType 		= 'f';
-		$value 				= "={$c->f}";
+		$value 				= "=[$c->f]";
 		$calculatedValue 	= self::$castBaseType($c);
 
 		// Shared formula?
