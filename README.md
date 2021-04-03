@@ -30,7 +30,7 @@ phpoffice/phpexcel/Classes/PHPExcel/Calculation/Functions.php  Please remove unn
    
     1.Put "phpoffice" folder directly inside your vendor folder (/vendor). OR
 
-    2.Using composer
+    2.Using composer [Update:Officical phpoffice will not work for php7.4 and higher. We recommend to use our version of phpoffice OR make changes suggested above ]
 
        Add these lines in your composer.json
 
