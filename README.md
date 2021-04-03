@@ -4,6 +4,23 @@
 ### Dependencies
  * Core Phpexcel Classes.(check more about it at https://github.com/PHPOffice/PHPExcel). 
  * Your Patience :-)
+ 
+#### Update #1
+Recently "PHPOffice/PHPExcel" was changed to read only. And in php **v >=7.4** this library is throwing error due to deprecated offset declaration [Array and string offset access syntax with curly braces is deprecated].
+
+In our **phpoffice/phpexcel** folder we have "made changes to remove errors". You still can download phpoffice/phpexcel library from official website and can make following changes.
+
+    For any offset ,replace {} with [] . 
+
+  * phpoffice/phpexcel/Classes/PHPExcel/Shared/String.php  line # 529,530,536,537
+  * phpoffice/phpexcel/Classes/PHPExcel/Calculation.php  line# 2186,2294,2296,2372,2374,2383,2632,2761,2763,2764,3039,3039,3042,3043,3459,3459,3501,3505,3558,3559
+  * phpoffice/phpexcel/Classes/PHPExcel/Worksheet/AutoFilter.php  line# 729
+  * phpoffice/phpexcel/Classes/PHPExcel/ReferenceHelper.php  line# 892,894
+  * phpoffice/phpexcel/Classes/PHPExcel/Cell.php  line# 772,773,776,777,779,780,784
+  * phpoffice/phpexcel/Classes/PHPExcel/Calculation/Functions.php  line# 311,313,534
+  
+phpoffice/phpexcel/Classes/PHPExcel/Calculation/Functions.php  Please remove unnecessary break; line#581 
+    
 
 ### How to use
  **For "Cakephp 3.*"**
@@ -36,7 +53,7 @@
 
  * Now in order to use it, load the component in any Controller using following code.
 
-     ```$this->loadComponent('PhpExcel');``` 
+     ```$this->loadComponent('PhpExcel');``` et
  
 **For "Cakephp 2.*"**
 
