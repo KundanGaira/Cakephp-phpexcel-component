@@ -25,10 +25,10 @@ phpoffice/phpexcel/Classes/PHPExcel/Calculation/Functions.php  Please remove unn
 ### How to use
  **For "Cakephp 3.*"**
  
- * First, Put PhpExcelComponent.php file (from cakephp3 folder) inside /src/Controller/Component.
- * Now second step is to, include directory containing Phpexcel classes.This can be done in two ways.
+ * First, Put PhpExcelComponent.php file (from our cakephp3 folder) inside /src/Controller/Component.
+ * Now second step is, to include directory containing Phpexcel classes.This can be done in two ways.
    
-    1.Put "phpoffice" folder directly inside your vendor folder (/vendor). OR
+    1.Put "phpoffice" folder directly inside your vendor folder (/vendor). **OR**
 
     2.Using composer [Update:Officical phpoffice will not work for php7.4 and higher. We recommend to use our version of phpoffice OR make changes suggested above ]
 
@@ -53,7 +53,7 @@ phpoffice/phpexcel/Classes/PHPExcel/Calculation/Functions.php  Please remove unn
 
  * Now in order to use it, load the component in any Controller using following code.
 
-     ```$this->loadComponent('PhpExcel');``` et
+     ```$this->loadComponent('PhpExcel');``` 
  
 **For "Cakephp 2.*"**
 
